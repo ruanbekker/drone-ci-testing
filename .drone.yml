@@ -3,4 +3,6 @@ pipeline:
     image: docker
     commands:
       - echo $myusername
+      - echo "run export command"
+      - export
     secrets: [ myusername ]
