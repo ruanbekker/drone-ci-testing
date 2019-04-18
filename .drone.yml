@@ -34,8 +34,8 @@ steps:
     image: plugins/s3
     settings:
       bucket: dump
-      source: public/**/*
-      target: /target/location
+      source: public/*
+      target: /path/to
       path_style: true
       access_key:
         from_secret: minio_access_key
