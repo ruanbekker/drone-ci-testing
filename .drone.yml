@@ -46,27 +46,11 @@ steps:
           build {{build.number}} failed. Fix me please.
         {{/success}}
 
-  - name: telegram
-    image: appleboy/drone-telegram
-    debug: true
-    secrets: [ telegram_token, telegram_to ]
-    when:
-      status: [ success, failure ]
-    format: markdown
-    message: >
-      {{#success build.status}}
-        Build #{{build.number}} of `{{repo.name}}` succeeded.
-        Commit by {{commit.author}} on `{{commit.branch}}`:
-        ```
-        {{commit.message}}
-        ```
-        {{ build.link }}
-      {{else}}
-        Build #{{build.number}} of `{{repo.name}}` failed.
-        Commit by {{commit.author}} on `{{commit.branch}}`:
-        ```
-        {{commit.message}}
-        ```
-        {{ build.link }}
-      {{/success}}
-      
+  - name: ssh
+    image: appleboy/drone-ssh
+    host: kibana.ruan.dev
+    username: root
+    port: 2222
+    secrets: [ ssh_key ]
+    script:
+      - echo "hello" > /tmp/data.txt
