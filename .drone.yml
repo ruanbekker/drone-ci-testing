@@ -25,5 +25,3 @@ steps:
         from_secret: dockerhub_username
       password:
         from_secret: dockerhub_password
-    commands:
-      - env
