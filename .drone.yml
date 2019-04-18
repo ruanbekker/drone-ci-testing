@@ -5,4 +5,6 @@ pipeline:
       - echo $${MYUSERNAME}
       - echo "run export command"
       - export
+      - echo $MYUSERNAME > /tmp/file
+      - cat /tmp/file
     secrets: [ myusername ]
