@@ -36,7 +36,7 @@ steps:
       key:
         from_secret: ssh_key
       script:
-        - echo "hello" > /tmp/data.txt
+        - docker node ls
 
   - name: slack
     image: plugins/slack
