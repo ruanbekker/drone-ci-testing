@@ -209,3 +209,24 @@ Verifyin the output:
 ❯ aws --profile objects s3 --endpoint-url=https://objects.domain.com ls --recursive s3://dump/
 2019-04-18 10:47:30          4 path/to/public/data.txt
 ```
+
+### Slack Notifications:
+
+- http://plugins.drone.io/drone-plugins/drone-slack/
+
+```
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: system_events
+      image_url: https://unsplash.it/256/256/?random
+      icon_url: https://unsplash.it/256/256/?random
+      template: >
+        {{#success build.status}}
+          build {{build.number}} succeeded. Good job. link: {{commit.link}} .
+        {{else}}
+          build {{build.number}} failed. Fix me please.
+        {{/success}}
+```
