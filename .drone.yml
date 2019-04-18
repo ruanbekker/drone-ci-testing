@@ -48,11 +48,24 @@ steps:
 
   - name: telegram
     image: appleboy/drone-telegram
-    token: xxxx
-    to: xxxx
+    secrets: [ telegram_token, telegram_to ]
+    when:
+      status: [ success, failure ]
+    format: markdown
     message: >
       {{#success build.status}}
-        build {{build.number}} succeeded. Good job.
+        Build #{{build.number}} of `{{repo.name}}` succeeded.
+        Commit by {{commit.author}} on `{{commit.branch}}`:
+        ```
+        {{commit.message}}
+        ```
+        {{ build.link }}
       {{else}}
-        build {{build.number}} failed. Fix me please.
+        Build #{{build.number}} of `{{repo.name}}` failed.
+        Commit by {{commit.author}} on `{{commit.branch}}`:
+        ```
+        {{commit.message}}
+        ```
+        {{ build.link }}
       {{/success}}
+      
