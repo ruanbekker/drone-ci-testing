@@ -48,8 +48,8 @@ steps:
 
   - name: telegram
     image: appleboy/drone-telegram
-    token: 387532308:AAExYuqjr5hjs4KdxeZQzoABU7tc1Nje7tc
-    to: 142714999
+    token: xxxx
+    to: xxxx
     message: >
       {{#success build.status}}
         build {{build.number}} succeeded. Good job.
