@@ -23,11 +23,9 @@ steps:
       auto_tag: false
       auto_tag_suffix: alpine
       tags:
-        - ${DRONE_COMMIT_BRANCH}
+        - ${DRONE_COMMIT}
         - latest
       username: 
         from_secret: dockerhub_username
       password:
         from_secret: dockerhub_password
-      commands:
-        - env
