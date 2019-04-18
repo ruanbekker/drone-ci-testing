@@ -1,6 +1,7 @@
 pipeline:
   docker:
     image: alpine
+    secrets: [ myusername ]
     commands:
       - echo $${MYUSERNAME}
       - echo "run export command"
