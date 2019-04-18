@@ -1,4 +1,4 @@
-# drone-ci-testing [![Build Status](https://cloud.drone.io/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://cloud.drone.io/ruanbekker/drone-ci-testing)
+# drone-ci-testing [![Build Status](https://drone.rbkr.xyz/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://drone.rbkr.xyz/ruanbekker/drone-ci-testing)
 testing cloud.drone.io
 
 ## Usage
