@@ -50,11 +50,10 @@ steps:
       webhook:
         from_secret: slack_webhook
       channel: system_events
-      image_url: https://unsplash.it/256/256/?random
-      icon_url: https://unsplash.it/256/256/?random
+      icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
       template: >
         {{#success build.status}}
-          build {{build.number}} succeeded. Good job link: {{commit.link}} .
+          build {{build.number}} succeeded. Good job link: {{build.status}} .
         {{else}}
           build {{build.number}} failed. Fix me please.
         {{/success}}
