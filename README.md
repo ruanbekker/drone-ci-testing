@@ -262,3 +262,51 @@ steps:
         {{/success}}
 
 ```
+
+### Telegram Notifications:
+
+```
+..
+- name: telegram
+  image: appleboy/drone-telegram
+  settings:
+    token:
+      from_secret: telegram_token
+    to:
+      from_secret: telegram_to
+  when:
+    status: [ success, failure ]
+  photo:
+    - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
+  format: markdown
+```
+
+### SSH Commands
+
+- http://plugins.drone.io/appleboy/drone-ssh/
+
+```
+...
+- name: ssh
+  image: appleboy/drone-ssh
+  pull: true
+  settings:
+    username: root
+    port: 2222
+    host:
+      from_secret: ssh_host
+    key:
+        from_secret: ssh_key
+    script:
+      - ls -lah
+      - find / -name Dockerfile
+      - docker node ls
+```
+
+### Docker Swarm Stacks
+
+- https://github.com/codestation/drone-stack
+
+```
+
+```
