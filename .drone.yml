@@ -1,6 +1,6 @@
 pipeline:
   docker:
-    image: docker
+    image: alpine
     commands:
       - echo $${MYUSERNAME}
       - echo "run export command"
