@@ -2,59 +2,85 @@ kind: pipeline
 name: default
 
 steps:
-  - name: test
-    image: alpine
-    environment:
-      MYUSERNAME:
-        from_secret: myusername
-    commands:
-      - echo "run env command"
-      - env
+- name: test
+  image: alpine
+  environment:
+    MYUSERNAME:
+      from_secret: myusername
+  commands:
+    - echo "run env command"
       
-  - name: publish
-    image: plugins/docker
-    settings:
-      repo: ruanbekker/dronetest
-      auto_tag: false
-      auto_tag_suffix: alpine
-      tags:
-        - ${DRONE_COMMIT}
-        - latest
-      username: 
-        from_secret: dockerhub_username
-      password:
-        from_secret: dockerhub_password
+- name: publish
+  image: plugins/docker
+  settings:
+    repo: ruanbekker/dronetest
+    auto_tag: false
+    auto_tag_suffix: alpine
+    tags:
+      - ${DRONE_COMMIT}
+      - latest
+    username: 
+      from_secret: dockerhub_username
+    password:
+      from_secret: dockerhub_password
 
-  - name: ssh
-    image: appleboy/drone-ssh
-    pull: true
-    settings:
-      username: root
-      port: 2222
-      host:
-        from_secret: ssh_host
-      key:
+- name: ssh
+  image: appleboy/drone-ssh
+  pull: true
+  settings:
+    username: root
+    port: 2222
+    host:
+      from_secret: ssh_host
+    key:
         from_secret: ssh_key
-      script:
-        - docker node ls
+    script:
+      - ls -lah
+      - docker node ls
 
-  - name: slack
-    image: plugins/slack
-    settings:
-      webhook:
-        from_secret: slack_webhook
-      channel: system_events
-      icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
-      template: >
-        {{#success build.status}}
-           build {{build.number}} status: *{{build.status}}*
-          build link: {{build.link}}
-          build author: {{build.author}}
-          build ref: {{build.ref}}
-          build event: {{build.event}}
-          build commit: {{build.commit}}
-          build branch: {{build.branch}}
-          build deploy: {{build.deployTo}}
-        {{else}}
-          build {{build.number}} failed. Fix me please.
-        {{/success}}
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: system_events
+    icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
+    template: >
+      {{#success build.status}}
+         build {{build.number}} status: *{{build.status}}*
+        build link: {{build.link}}
+        build author: {{build.author}}
+        build ref: {{build.ref}}
+        build event: {{build.event}}
+        build commit: {{build.commit}}
+        build branch: {{build.branch}}
+        build deploy: {{build.deployTo}}
+      {{else}}
+        build {{build.number}} failed. Fix me please.
+      {{/success}}
+
+- name: telegram
+  image: appleboy/drone-telegram
+  token:
+    from_secret: telegram_token
+  to:
+    from_secret: telegram_to
+  when:
+    status: [ success, failure ]
+  format: markdown
+  message: >
+    {{#success build.status}}
+      Build #{{build.number}} of `{{repo.name}}` succeeded.
+      Commit by {{commit.author}} on `{{commit.branch}}`:
+      ```
+      {{commit.message}}
+      ```
+      {{ build.link }}
+    {{else}}
+      Build #{{build.number}} of `{{repo.name}}` failed.
+      Commit by {{commit.author}} on `{{commit.branch}}`:
+      ```
+      {{commit.message}}
+      ```
+      {{ build.link }}
+    {{/success}}
