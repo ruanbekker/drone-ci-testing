@@ -1,32 +1,58 @@
-pipeline:
-  run_golang:
-    group: build
-    image: golang
-    commands:
-      - go build
-      - go test
-      
-  run_bash:
-    group: build
-    image: alpine
-    commands:
-      - echo "running env command"
-      - env
+kind: pipeline
+name: default
 
-  slack:
+steps:
+  - name: test
+    image: alpine
+    environment:
+      MYUSERNAME:
+        from_secret: myusername
+    commands:
+      - echo "run env command"
+      - env
+      
+  - name: publish
+    image: plugins/docker
+    settings:
+      repo: ruanbekker/dronetest
+      auto_tag: false
+      auto_tag_suffix: alpine
+      tags:
+        - ${DRONE_COMMIT}
+        - latest
+      username: 
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_password
+
+  - name: slack
     image: plugins/slack
-    webhook:
-      from_secret: slack_webhook
-    channel: system_events
-    link_names: true
-    icon_url: https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/microsoft/153/police-cars-revolving-light_1f6a8.png
-    when:
-      status: [ success, failure ]
-    template: >
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: system_events
+      icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
+      template: >
+        {{#success build.status}}
+           build {{build.number}} status: *{{build.status}}*
+          build link: {{build.link}}
+          build author: {{build.author}}
+          build ref: {{build.ref}}
+          build event: {{build.event}}
+          build commit: {{build.commit}}
+          build branch: {{build.branch}}
+          build deploy: {{build.deployTo}}
+        {{else}}
+          build {{build.number}} failed. Fix me please.
+        {{/success}}
+
+  - name: telegram:
+    image: appleboy/drone-telegram
+    token: 387532308:AAExYuqjr5hjs4KdxeZQzoABU7tc1Nje7tc
+    to: 142714999
+    message: >
       {{#success build.status}}
-         build {{build.number}} status: *{{uppercase build.status}}*
-        by: {{lowercase build.author}}
-        more info: {{build.link}}
+        build {{build.number}} succeeded. Good job.
       {{else}}
         build {{build.number}} failed. Fix me please.
       {{/success}}
