@@ -17,4 +17,3 @@ steps:
     image: plugins/docker
     repo: ruanbekker/dronetest
     secrets: [ dockerhub_username, dockerhub_password ]
-    
