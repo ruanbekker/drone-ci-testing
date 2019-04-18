@@ -128,7 +128,8 @@ CI_JOB_STATUS=success
 DRONE_STAGE_FINISHED=1555573281
 ```
 
-### Publish to Dockerhub
+### Publish to Dockerhub:
+- http://plugins.drone.io/drone-plugins/drone-docker/
 
 - Clone
 - Build Docker Image
@@ -168,4 +169,43 @@ steps:
         from_secret: dockerhub_username
       password:
         from_secret: dockerhub_password
+```
+
+### Publish to S3 Object Storage
+
+Publish data under `public/*` to minio object stroage:
+- http://plugins.drone.io/drone-plugins/drone-s3/
+
+```
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    ..
+      
+  - name: publish
+    ..
+        
+  - name: upload
+    image: plugins/s3
+    settings:
+      bucket: dump
+      source: public/*
+      target: /path/to
+      path_style: true
+      access_key:
+        from_secret: minio_access_key
+      secret_key:
+        from_secret: minio_secret_key
+      endpoint: 
+        from_secret: minio_host
+
+```
+
+Verifyin the output:
+
+```
+❯ aws --profile objects s3 --endpoint-url=https://objects.domain.com ls --recursive s3://dump/
+2019-04-18 10:47:30          4 path/to/public/data.txt
 ```
