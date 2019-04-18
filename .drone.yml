@@ -19,8 +19,6 @@ pipeline:
       from_secret: slack_webhook
       channel: system_events
       icon_url: https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/microsoft/153/police-cars-revolving-light_1f6a8.png
-      when:
-        status: [ success, failure ]
       template: >
         {{#success build.status}}
            build {{build.number}} status: *{{uppercase build.status}}*
