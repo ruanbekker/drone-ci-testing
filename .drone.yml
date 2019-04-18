@@ -11,7 +11,7 @@ pipeline:
     image: alpine
     commands:
       - myhostname=$(hostname)
-      - echo my hostname is ${myhostname}
+      - echo my hostname is ${myhostname} 
       
   slack:
     image: plugins/slack
