@@ -44,7 +44,8 @@ steps:
     webhook:
       from_secret: slack_webhook
     channel: system_events
-    icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
+    username: drone
+    icon_url: https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
     template: >
       {{#success build.status}}
          build {{build.number}} status: *{{build.status}}*
@@ -68,6 +69,8 @@ steps:
       from_secret: telegram_to
   when:
     status: [ success, failure ]
+  photo:
+    - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
   format: markdown
   message: >
     {{#success build.status}}
