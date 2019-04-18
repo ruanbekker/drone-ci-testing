@@ -1,0 +1,6 @@
+pipeline:
+  docker:
+    image: docker
+    commands:
+      - echo $myusername
+    secrets: [ myusername ]
