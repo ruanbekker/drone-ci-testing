@@ -10,8 +10,8 @@ pipeline:
     group: build
     image: alpine
     commands:
-      - myhostname=$(hostname)
-      - echo my hostname is ${myhostname} 
+      - echo "running env command"
+      - env
       
   slack:
     image: plugins/slack
