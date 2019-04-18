@@ -1,66 +1,21 @@
-kind: pipeline
-name: default
-
-steps:
-  - name: test
-    image: alpine
-    environment:
-      MYUSERNAME:
-        from_secret: myusername
+pipeline:
+  backend:
+    group: build
+    image: golang
     commands:
-      - echo "echo secret"
-      - echo $${MYUSERNAME}
-      - echo "run env command"
-      - env
-      - echo $${MYUSERNAME} > /tmp/file
-      - mkdir -p /tmp/foo/dir
-      - touch /tmp/foo/dir/test.txt
-      
-  - name: publish
-    image: plugins/docker
-    settings:
-      repo: ruanbekker/dronetest
-      auto_tag: false
-      auto_tag_suffix: alpine
-      tags:
-        - ${DRONE_COMMIT}
-        - latest
-      username: 
-        from_secret: dockerhub_username
-      password:
-        from_secret: dockerhub_password
-        
-  - name: upload
-    image: plugins/s3
-    settings:
-      bucket: dump
-      source: public/*
-      target: /path/to
-      path_style: true
-      access_key:
-        from_secret: minio_access_key
-      secret_key:
-        from_secret: minio_secret_key
-      endpoint: 
-        from_secret: minio_host
-
-  - name: slack
+      - go build
+      - go test
+  frontend:
+    group: build
+    image: node
+    commands:
+      - npm install
+      - npm run test
+      - npm run build
+  slack:
     image: plugins/slack
-    settings:
-      webhook:
+    channel: system_events
+    webhook:
         from_secret: slack_webhook
-      channel: system_events
-      icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
-      template: >
-        {{#success build.status}}
-           build {{build.number}} status: *{{build.status}}*
-          build link: {{build.link}}
-          build author: {{build.author}}
-          build ref: {{build.ref}}
-          build event: {{build.event}}
-          build commit: {{build.commit}}
-          build branch: {{build.branch}}
-          build deploy: {{build.deployTo}}
-        {{else}}
-          build {{build.number}} failed. Fix me please.
-        {{/success}}
+    when:
+      status: [ success, failure ]
