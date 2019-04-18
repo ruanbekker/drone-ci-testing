@@ -72,19 +72,16 @@ steps:
   photo:
     - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
   format: markdown
-  message: >
-    {{#success build.status}}
-      Build #{{build.number}} of `{{repo.name}}` succeeded.
-      Commit by {{commit.author}} on `{{commit.branch}}`:
-      ```
-      {{commit.message}}
-      ```
-      {{ build.link }}
-    {{else}}
-      Build #{{build.number}} of `{{repo.name}}` failed.
-      Commit by {{commit.author}} on `{{commit.branch}}`:
-      ```
-      {{commit.message}}
-      ```
-      {{ build.link }}
-    {{/success}}
+  template: >
+      {{#success build.status}}
+         build {{build.number}} status: *{{build.status}}*
+        build link: {{build.link}}
+        build author: {{build.author}}
+        build ref: {{build.ref}}
+        build event: {{build.event}}
+        build commit: {{build.commit}}
+        build branch: {{build.branch}}
+        build deploy: {{build.deployTo}}
+      {{else}}
+        build {{build.number}} failed. Fix me please.
+      {{/success}}
