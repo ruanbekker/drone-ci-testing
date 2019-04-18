@@ -1,10 +1,9 @@
-pipeline:
-  docker:
+kind: pipeline
+name: default
+
+steps:
+  - name: build
     image: alpine
-    secrets: [ myusername ]
-    commands:
-      - echo $${MYUSERNAME}
-      - echo "run export command"
-      - export
-      - echo $MYUSERNAME > /tmp/file
-      - cat /tmp/file
+    environment:
+      MYUSERNAME:
+        from_secret: myusername
