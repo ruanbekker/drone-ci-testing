@@ -53,10 +53,14 @@ steps:
       icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
       template: >
         {{#success build.status}}
-          build {{build.number}} succeeded. Status: {{build.status}}
+           build {{build.number}} succeeded. Status: {{build.status}}
           build link: {{build.link}}
           build author: {{build.author}}
           build ref: {{build.ref}}
+          build event: {{build.event}}
+          build commit: {{build.commit}}
+          build branch: {{build.branch}}
+          build deploy: {{build.deployTo}}
         {{else}}
           build {{build.number}} failed. Fix me please.
         {{/success}}
