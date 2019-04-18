@@ -48,6 +48,7 @@ steps:
 
   - name: telegram
     image: appleboy/drone-telegram
+    debug: true
     secrets: [ telegram_token, telegram_to ]
     when:
       status: [ success, failure ]
