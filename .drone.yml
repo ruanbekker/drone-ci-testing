@@ -46,7 +46,7 @@ steps:
           build {{build.number}} failed. Fix me please.
         {{/success}}
 
-  - name: telegram:
+  - name: telegram
     image: appleboy/drone-telegram
     token: 387532308:AAExYuqjr5hjs4KdxeZQzoABU7tc1Nje7tc
     to: 142714999
