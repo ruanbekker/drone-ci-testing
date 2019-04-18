@@ -15,5 +15,11 @@ steps:
       - echo $${MYUSERNAME} > /tmp/file
   - name: publish
     image: plugins/docker
-    repo: ruanbekker/dronetest
     secrets: [ dockerhub_username, dockerhub_password ]
+    settings:
+      repo: ruanbekker/dronetest
+      tags: latest
+      username: 
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_password
