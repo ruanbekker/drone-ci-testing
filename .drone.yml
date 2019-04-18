@@ -1,6 +1,9 @@
 pipeline:
   docker:
     image: docker
+    environment:
+      MYUSERNAME:
+        from_secret: myusername
     commands:
       - echo $${MYUSERNAME}
       - echo "run export command"
