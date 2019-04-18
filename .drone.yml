@@ -7,3 +7,5 @@ steps:
     environment:
       MYUSERNAME:
         from_secret: myusername
+    commands:
+      - export
