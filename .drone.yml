@@ -34,7 +34,7 @@ steps:
     image: plugins/s3
     settings:
       bucket: dump
-      source: .
+      source: public/**/*
       target: /target/location
       path_style: true
       access_key:
