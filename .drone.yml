@@ -13,13 +13,17 @@ steps:
       - echo "run env command"
       - env
       - echo $${MYUSERNAME} > /tmp/file
+      - mkdir -p /tmp/foo/dir
+      - touch /tmp/foo/dir/test.txt
+      
   - name: publish
     image: plugins/docker
-    secrets: [ dockerhub_username, dockerhub_password ]
     settings:
       repo: ruanbekker/dronetest
-      tags: latest
+      auto_tag: true
       username: 
         from_secret: dockerhub_username
       password:
         from_secret: dockerhub_password
+    commands:
+      - env
