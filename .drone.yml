@@ -27,11 +27,16 @@ steps:
 
   - name: ssh
     image: appleboy/drone-ssh
-    username: root
-    port: 2222
-    secrets: [ ssh_host, ssh_key ]
-    script:
-      - echo "hello" > /tmp/data.txt
+    pull: true
+    settings:
+      username: root
+      port: 2222
+      host:
+        from_secret: ssh_host
+      key:
+        from_secret: ssh_key
+      script:
+        - echo "hello" > /tmp/data.txt
 
   - name: slack
     image: plugins/slack
