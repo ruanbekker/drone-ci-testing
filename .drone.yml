@@ -61,10 +61,11 @@ steps:
 
 - name: telegram
   image: appleboy/drone-telegram
-  token:
-    from_secret: telegram_token
-  to:
-    from_secret: telegram_to
+  settings:
+    token:
+      from_secret: telegram_token
+    to:
+      from_secret: telegram_to
   when:
     status: [ success, failure ]
   format: markdown
