@@ -12,3 +12,10 @@ steps:
       - echo $${MYUSERNAME}
       - echo "run env command"
       - env
+      - echo $${MYUSERNAME} > /tmp/file
+  - name: publish
+    image: plugins/docker
+    repo: ruanbekker/dronetest
+    tags: latest
+    secrets: [ dockerhub_username, dockerhub_password ]
+    
