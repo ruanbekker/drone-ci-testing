@@ -1,0 +1,32 @@
+pipeline:
+  run_golang:
+    group: build
+    image: golang
+    commands:
+      - go build
+      - go test
+      
+  run_bash:
+    group: build
+    image: alpine
+    commands:
+      - echo "running env command"
+      - env
+
+  slack:
+    image: plugins/slack
+    webhook:
+      from_secret: slack_webhook
+    channel: system_events
+    link_names: true
+    icon_url: https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/microsoft/153/police-cars-revolving-light_1f6a8.png
+    when:
+      status: [ success, failure ]
+    template: >
+      {{#success build.status}}
+         build {{build.number}} status: *{{uppercase build.status}}*
+        by: {{lowercase build.author}}
+        more info: {{build.link}}
+      {{else}}
+        build {{build.number}} failed. Fix me please.
+      {{/success}}
