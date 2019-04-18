@@ -20,8 +20,11 @@ steps:
     image: plugins/docker
     settings:
       repo: ruanbekker/dronetest
-      auto_tag: true
+      auto_tag: false
       auto_tag_suffix: alpine
+      tags:
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
       username: 
         from_secret: dockerhub_username
       password:
