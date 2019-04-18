@@ -2,7 +2,7 @@ pipeline:
   docker:
     image: docker
     commands:
-      - echo $MYUSERNAME
+      - echo $${MYUSERNAME}
       - echo "run export command"
       - export
     secrets: [ myusername ]
