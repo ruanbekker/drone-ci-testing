@@ -12,11 +12,20 @@ pipeline:
     commands:
       - echo "running env command"
       - env
-      
-  slack:
+
+  slack
     image: plugins/slack
-    channel: system_events
     webhook:
       from_secret: slack_webhook
-    when:
-      status: [ success, failure ]
+      channel: system_events
+      icon_emoji: :male-police-officer:
+      template: >
+        {{#success build.status}}
+           build {{build.number}} status: *{{uppercase build.status}}*
+          by: {{lowercase build.author}}
+          more info: {{build.link}}
+        {{else}}
+          build {{build.number}} failed. Fix me please.
+        {{/success}}
+      when:
+        status: [ success, failure ]
