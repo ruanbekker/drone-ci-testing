@@ -25,6 +25,14 @@ steps:
       password:
         from_secret: dockerhub_password
 
+  - name: ssh
+    image: appleboy/drone-ssh
+    username: root
+    port: 2222
+    secrets: [ ssh_host, ssh_key ]
+    script:
+      - echo "hello" > /tmp/data.txt
+
   - name: slack
     image: plugins/slack
     settings:
@@ -45,12 +53,3 @@ steps:
         {{else}}
           build {{build.number}} failed. Fix me please.
         {{/success}}
-
-  - name: ssh
-    image: appleboy/drone-ssh
-    host: kibana.ruan.dev
-    username: root
-    port: 2222
-    secrets: [ ssh_key ]
-    script:
-      - echo "hello" > /tmp/data.txt
