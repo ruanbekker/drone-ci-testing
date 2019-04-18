@@ -230,3 +230,35 @@ Verifyin the output:
           build {{build.number}} failed. Fix me please.
         {{/success}}
 ```
+
+More verbose info:
+
+```
+kind: pipeline
+name: default
+
+steps:
+..
+
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: system_events
+      icon_url: https://www.pngkit.com/png/full/92-920674_drone-logo-png-transparent-drone-ci-logo.png
+      template: >
+        {{#success build.status}}
+           build {{build.number}} status: *{{build.status}}*
+          build link: {{build.link}}
+          build author: {{build.author}}
+          build ref: {{build.ref}}
+          build event: {{build.event}}
+          build commit: {{build.commit}}
+          build branch: {{build.branch}}
+          build deploy: {{build.deployTo}}
+        {{else}}
+          build {{build.number}} failed. Fix me please.
+        {{/success}}
+
+```
