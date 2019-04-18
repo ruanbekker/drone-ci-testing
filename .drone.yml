@@ -8,7 +8,7 @@ steps:
       MYUSERNAME:
         from_secret: myusername
     commands:
-      - echo "run export command"
-      - export
+      - echo "echo secret"
+      - echo $${MYUSERNAME}
       - echo "run env command"
       - env
