@@ -1,21 +1,22 @@
 pipeline:
-  backend:
+  run_golang:
     group: build
     image: golang
     commands:
       - go build
       - go test
-  frontend:
+      
+  run_bash:
     group: build
-    image: node
+    image: alpine
     commands:
-      - npm install
-      - npm run test
-      - npm run build
+      - myhostname=$(hostname)
+      - echo my hostname is ${myhostname}
+      
   slack:
     image: plugins/slack
     channel: system_events
     webhook:
-        from_secret: slack_webhook
+      from_secret: slack_webhook
     when:
       status: [ success, failure ]
