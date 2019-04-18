@@ -8,11 +8,3 @@ pipeline:
       - echo $MYUSERNAME > /tmp/file
       - cat /tmp/file
     secrets: [ myusername ]
-  debug:
-    image: alpine
-    environment:
-      MYUSERNAME:
-        from_secret: myusername
-    commands:
-      - export
-      - echo $MYUSERNAME
