@@ -2,10 +2,13 @@ kind: pipeline
 name: default
 
 steps:
-  - name: build
+  - name: test
     image: alpine
     environment:
       MYUSERNAME:
         from_secret: myusername
     commands:
+      - echo "run export command"
       - export
+      - echo "run env command"
+      - env
