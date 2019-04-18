@@ -29,3 +29,17 @@ steps:
         from_secret: dockerhub_username
       password:
         from_secret: dockerhub_password
+        
+  - name: upload
+    image: plugins/s3
+    settings:
+      bucket: dump
+      source: .
+      target: /target/location
+      path_style: true
+      access_key:
+        from_secret: minio_access_key
+      secret_key:
+        from_secret: minio_secret_key
+      endpoint: 
+        from_secret: minio_host
