@@ -21,6 +21,7 @@ steps:
     settings:
       repo: ruanbekker/dronetest
       auto_tag: true
+      auto_tag_suffix: alpine
       username: 
         from_secret: dockerhub_username
       password:
