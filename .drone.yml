@@ -49,7 +49,7 @@ steps:
     settings:
       webhook:
         from_secret: slack_webhook
-      channel: system_alerts
+      channel: system_events
       image_url: https://unsplash.it/256/256/?random
       icon_url: https://unsplash.it/256/256/?random
       template: >
