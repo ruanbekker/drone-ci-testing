@@ -128,6 +128,28 @@ CI_JOB_STATUS=success
 DRONE_STAGE_FINISHED=1555573281
 ```
 
+### Secrets in Environment Variables
+
+Secrets are exposed to your pipeline steps and can be referenced with uppercase names: [reference](https://discourse.drone.io/t/secret-problems/2863)
+
+```
+pipeline:
+  docker:
+    image: docker
+    secrets: [ swarm_key ]
+    commands:
+    - echo $${SWARM_KEY}
+    when:
+      branch: [master, develop, release/*]
+```
+
+will result in:
+
+```
+echo ${SWARM_KEY}
+-----rsa key ----- 
+```
+
 ### Publish to Dockerhub:
 - http://plugins.drone.io/drone-plugins/drone-docker/
 
