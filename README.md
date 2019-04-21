@@ -325,6 +325,10 @@ steps:
       - docker node ls
 ```
 
+### Example Pipelines
+
+- [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
+
 ### Docker Swarm Stacks
 
 - https://github.com/codestation/drone-stack
