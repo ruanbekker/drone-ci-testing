@@ -37,8 +37,9 @@ steps:
     volumes:
       - .:/tmp/ssh
     script:
+      - pwd
       - ls -lah
-      - ls /tmp/ssh/
+      - ls /tmp/
       - find / -name Dockerfile
       - docker node ls
 
