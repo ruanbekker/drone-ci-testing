@@ -34,8 +34,11 @@ steps:
       from_secret: ssh_host
     key:
         from_secret: ssh_key
+    volumes:
+      - .:/tmp/ssh
     script:
       - ls -lah
+      - ls /tmp/ssh/
       - find / -name Dockerfile
       - docker node ls
 
