@@ -29,7 +29,7 @@ steps:
   pull: true
   settings:
     username: root
-    port: 2222
+    port: 22
     host:
       from_secret: ssh_host
     key:
