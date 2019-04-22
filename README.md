@@ -1,6 +1,23 @@
 # drone-ci-testing [![Build Status](https://drone.rbkr.xyz/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://drone.rbkr.xyz/ruanbekker/drone-ci-testing)
 testing cloud.drone.io
 
+## Drone CLI Setup
+
+[Docs](https://docs.drone.io/cli/install/)
+
+```
+curl -L https://github.com/drone/drone-cli/releases/download/v1.0.7/drone_darwin_amd64.tar.gz | tar zx
+sudo cp drone /usr/local/bin
+```
+
+Get your account details at https://drone.your-domain.com/account
+
+```
+export DRONE_SERVER=https://yourdomain
+export DRONE_TOKEN=xx
+drone info
+```
+
 ## Usage
 
 ### Run shell commands in a step
