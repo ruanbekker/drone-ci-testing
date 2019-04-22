@@ -1,6 +1,24 @@
 # drone-ci-testing [![Build Status](https://drone.rbkr.xyz/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://drone.rbkr.xyz/ruanbekker/drone-ci-testing)
 testing cloud.drone.io
 
+## Contents
+
+Contents of this page
+
+* [Setups]()
+  * [Drone CLI Setup(#drone-cli-setup)
+
+* [Pipeline Examples]()
+  * [Shell Commands in a Step](#run-shell-commands-in-a-step)
+  * [Secrets in Environment Variables](#secrets-in-environment-variables)
+  * [Publish to Dockerhub](#publish-to-dockerhub)
+  * [Publish to S3](#publish-to-s3-object-storage)
+  * [Slack Notifications](#slack-notifications)
+  * [Telegram Notifications](#telegram-notifications)
+  * [SSH Example](#ssh-example)
+  * [SCP Example](#scp-example)
+  * [Full Pipeline Examples](#pipeline-examples)
+
 ## Drone CLI Setup
 
 [Docs](https://docs.drone.io/cli/install/)
@@ -320,7 +338,7 @@ steps:
   format: markdown
 ```
 
-### SSH Commands
+### SSH Example
 
 - http://plugins.drone.io/appleboy/drone-ssh/
 
@@ -365,6 +383,7 @@ steps:
 ### Example Pipelines
 
 - [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
+- [drone/docs pipeline](https://github.com/drone/docs/blob/master/.drone.yml)
 
 ### Docker Swarm Stacks
 
