@@ -6,7 +6,7 @@ testing cloud.drone.io
 Contents of this page
 
 * [Setups]()
-  * [Drone CLI Setup(#drone-cli-setup)
+  * [Drone CLI Setup](#drone-cli-setup)
 
 * [Pipeline Examples]()
   * [Shell Commands in a Step](#run-shell-commands-in-a-step)
@@ -17,6 +17,7 @@ Contents of this page
   * [Telegram Notifications](#telegram-notifications)
   * [SSH Example](#ssh-example)
   * [SCP Example](#scp-example)
+  * [Rsync Example](#rsync-example)
   * [Full Pipeline Examples](#pipeline-examples)
 
 ## Drone CLI Setup
@@ -403,6 +404,27 @@ And that your repository is marked as trusted.
     when:
       event: [push]
       branch: [master, develop, release/*]
+```
+
+### Rsync Example
+
+```
+  push:
+    image: drillster/drone-rsync
+    hosts: 
+      from_secret: swarm_host
+    key:
+      from_secret: swarm_key
+    source: _site/*
+    target: ~/example.com
+    recursive: true
+    user:
+      from_secret: swarm_user
+    delete: true
+    script:
+      - chmod -R 755 ~/example.com
+    when:
+      event: [push]
 ```
 
 ### Example Pipelines
