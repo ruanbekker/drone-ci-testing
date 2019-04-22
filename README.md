@@ -325,6 +325,26 @@ steps:
       - docker node ls
 ```
 
+### SCP Example
+
+- https://github.com/appleboy/drone-scp
+
+```
+ myscp-step:
+   image: appleboy/drone-scp
+   host: 
+     from_secret: swarm_host
+   username:
+     from_secret: swarm_user
+   key:
+     from_secret: swarm_key
+   target: /root/context
+   source: /root
+   when:
+     event: [push]
+```
+
+
 ### Example Pipelines
 
 - [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
