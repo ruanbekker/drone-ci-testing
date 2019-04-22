@@ -18,6 +18,7 @@ Contents of this page
   * [SSH Example](#ssh-example)
   * [SCP Example](#scp-example)
   * [Rsync Example](#rsync-example)
+  * [Parallel Builds](#parallel-builds)
   * [Full Pipeline Examples](#pipeline-examples)
 
 ## Drone CLI Setup
@@ -393,6 +394,8 @@ Mentioned here:
 
 And that your repository is marked as trusted.
 
+Note that this will run on the host where the drone agent is located.
+
 ```
   deploy:
     image: docker
@@ -425,6 +428,32 @@ And that your repository is marked as trusted.
       - chmod -R 755 ~/example.com
     when:
       event: [push]
+```
+
+### Parallel Builds
+
+Running steps in parallel:
+
+```
+ p1-a:
+    image: alpine
+    group: test
+    environment:
+      TAGS: foobar
+    commands:
+      - sleep 20
+      - date
+      - echo done
+      
+  p1-b:
+    image: alpine
+    group: test
+    environment:
+      TAGS: foobar
+    commands:
+      - sleep 20
+      - date
+      - echo done
 ```
 
 ### Example Pipelines
