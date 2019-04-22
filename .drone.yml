@@ -10,19 +10,19 @@ steps:
   commands:
     - echo "run env command"
       
-- name: publish
-  image: plugins/docker
-  settings:
-    repo: ruanbekker/dronetest
-    auto_tag: false
-    auto_tag_suffix: alpine
-    tags:
-      - ${DRONE_COMMIT}
-      - latest
-    username: 
-      from_secret: dockerhub_username
-    password:
-      from_secret: dockerhub_password
+#- name: publish
+#  image: plugins/docker
+#  settings:
+#    repo: ruanbekker/dronetest
+#    auto_tag: false
+#    auto_tag_suffix: alpine
+#    tags:
+#     - ${DRONE_COMMIT}
+#      - latest
+#    username: 
+#      from_secret: dockerhub_username
+#    password:
+#      from_secret: dockerhub_password
 
 - name: ssh
   image: appleboy/drone-ssh
