@@ -379,6 +379,31 @@ steps:
      event: [push]
 ```
 
+### Mount Docker Socket Example
+
+This will allow your container to run docker commands as you are logged onto the host.
+
+Ensure you set your user as admin:
+
+`--env=DRONE_USER_CREATE=username:youruser,admin:true`
+
+Mentioned here:
+- https://discourse.drone.io/t/linter-untrusted-repositories-cannot-mount-host-volumes/3438
+
+And that your repository is marked as trusted.
+
+```
+  deploy:
+    image: docker
+    secrets: [ swarm_key, swarm_host ]
+    commands:
+    - docker node ls
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: [push]
+      branch: [master, develop, release/*]
+```
 
 ### Example Pipelines
 
