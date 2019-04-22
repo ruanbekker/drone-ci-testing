@@ -19,6 +19,7 @@ Contents of this page
   * [SCP Example](#scp-example)
   * [Rsync Example](#rsync-example)
   * [Parallel Builds](#parallel-builds)
+  * [Docker Remote Tunnel Example](#docker-remote-tunnel-example)
   * [Full Pipeline Examples](#pipeline-examples)
 
 ## Drone CLI Setup
@@ -454,6 +455,28 @@ Running steps in parallel:
       - sleep 20
       - date
       - echo done
+```
+
+### Docker Remote Tunnel Example
+
+Using docker-remote-tunnel to run docker commands remotely via docker socket
+
+```
+  deploy:
+    image: ruanbekker/docker-remote-tunnel
+    secrets: [ swarm_key_base64, swarm_host ]
+    commands:
+    - echo $${SWARM_KEY_BASE64} | base64 -d > /tmp/key
+    - chmod 600 /tmp/key
+    - docker-tunnel --connect root@$${SWARM_HOST}
+    - sleep 5
+    - source /root/.docker-tunnel.sh
+    - docker ps
+    - docker-tunnel --terminate
+    when:
+      event: [push]
+      branch: [master, develop, release/*]
+
 ```
 
 ### Example Pipelines
