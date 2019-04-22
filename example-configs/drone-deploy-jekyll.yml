@@ -1,0 +1,62 @@
+pipeline:
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - /drone/.bundle
+    volumes:
+      - /tmp:/cache
+      
+  build:
+    image: jekyll/jekyll:latest
+    environment:
+      - BUNDLE_PATH=/drone/.bundle
+    commands:
+      - touch Gemfile.lock
+      - chmod a+w Gemfile.lock
+      - mkdir /drone/.bundle
+      - chown -R jekyll:jekyll /drone/src /drone/.bundle
+      - gem update --system
+      - gem install bundler
+      - bundle install
+      - bundle exec jekyll build
+      
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - /drone/.bundle
+    volumes:
+      - /tmp:/cache
+      
+  push:
+    image: drillster/drone-rsync
+    hosts: 
+      from_secret: swarm_host
+    key:
+      from_secret: swarm_key
+    source: _site/*
+    target: ~/example.com
+    recursive: true
+    user:
+      from_secret: swarm_user
+    delete: true
+    script:
+      - chmod -R 755 ~/example.com
+    when:
+      event: [push]
+      
+  deploy:
+    image: appleboy/drone-ssh
+    host: 
+      from_secret: swarm_host
+    username:
+      from_secret: swarm_user
+    key:
+      from_secret: swarm_key
+    port: 22
+    script:
+      - docker stack deploy -c /root/example.com/docker-stack.yml apps
+    when:
+      event: [push]  
+      
