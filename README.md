@@ -22,6 +22,22 @@ Contents of this page
   * [Docker Remote Tunnel Example](#docker-remote-tunnel-example)
   * [Full Pipeline Examples](#pipeline-examples)
 
+## Notes
+
+- Drone clones github repo to `/drone/src`
+- Context of the data gets transferred to each step
+- Having each step do `hostname >> data.txt`, will output this result on the 3rd step:
+
+```
++ hostname >> data.txt
+312	+ cat data.txt
+313	2cf48dff07ac
+314	8f9b2662253a
+315	90c191ee99cc
+```
+
+- To mount volumes, you need to have yourself as admin and enable the repo as trusted in the settings
+
 ## Drone CLI Setup
 
 [Docs](https://docs.drone.io/cli/install/)
