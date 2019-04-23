@@ -20,6 +20,8 @@ Contents of this page
   * [Rsync Example](#rsync-example)
   * [Parallel Builds](#parallel-builds)
   * [Docker Remote Tunnel Example](#docker-remote-tunnel-example)
+  * [Use Services with Pipelines](#use-services-with-pipelines)
+  * [Multipipeline Depends on Steps](#multipipeline-depends-on-steps)
   * [Full Pipeline Examples](#pipeline-examples)
 
 ## Notes
@@ -493,6 +495,90 @@ Using docker-remote-tunnel to run docker commands remotely via docker socket
       event: [push]
       branch: [master, develop, release/*]
 
+```
+
+### Use Services with Pipelines
+
+You can use services like postgres databases in your steps:
+
+```
+pipeline:
+  ping:
+    image: postgres
+    commands:
+      - sleep 10
+      - psql -U postgres -d test -h database -p 5432 -c "CREATE TABLE person( NAME TEXT );"
+      - psql -U postgres -d test -h database -p 5432 -c "INSERT INTO person VALUES('john smith');"
+      - psql -U postgres -d test -h database -p 5432 -c "INSERT INTO person VALUES('jane doe');"
+      - psql -U postgres -d test -h database -p 5432 -c "SELECT * FROM person;"
+
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=test
+```
+
+### Multipipeline Depends on Steps
+
+Resource:
+- https://docs.drone.io/user-guide/pipeline/multi-machine/
+
+Dependency graph, spans across multiple machines. Last step only executes when the frontend, backend pipelines has finished
+
+```
+kind: pipeline
+name: frontend
+
+steps:
+- name: build
+  image: alpine
+  group: one
+  commands:
+  - sleep 10
+  - echo done
+  - date
+
+- name: build2
+  image: alpine
+  group: one
+  commands:
+  - sleep 10
+  - echo done
+  - date
+
+---
+kind: pipeline
+name: backend
+
+steps:
+- name: build
+  image: alpine
+  commands:
+  - sleep 10
+  - echo done
+  - date
+
+services:
+- name: redis
+  image: redis
+
+---
+kind: pipeline
+name: after
+
+steps:
+- name: notify
+  image: alpine
+  commands:
+  - sleep 10
+  - echo done
+  - date
+
+depends_on:
+- frontend
+- backend
 ```
 
 ### Example Pipelines
