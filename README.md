@@ -7,7 +7,8 @@ Contents of this page
 
 * [Setups]()
   * [Drone CLI Setup](#drone-cli-setup)
-
+  * [Drone CLI Secrets](#drone-cli-secrets)
+  
 * [Pipeline Examples]()
   * [Shell Commands in a Step](#run-shell-commands-in-a-step)
   * [Secrets in Environment Variables](#secrets-in-environment-variables)
@@ -15,6 +16,7 @@ Contents of this page
   * [Publish to S3](#publish-to-s3-object-storage)
   * [Slack Notifications](#slack-notifications)
   * [Telegram Notifications](#telegram-notifications)
+  * [Email Notifications](#email-notifications)
   * [SSH Example](#ssh-example)
   * [SCP Example](#scp-example)
   * [Rsync Example](#rsync-example)
@@ -40,7 +42,9 @@ Contents of this page
 
 - To mount volumes, you need to have yourself as admin and enable the repo as trusted in the settings
 
-## Drone CLI Setup
+## Drone CLI
+
+### Drone CLI Setup
 
 [Docs](https://docs.drone.io/cli/install/)
 
@@ -55,6 +59,35 @@ Get your account details at https://drone.your-domain.com/account
 export DRONE_SERVER=https://yourdomain
 export DRONE_TOKEN=xx
 drone info
+```
+
+### Drone CLI Secrets
+
+Creating Secrets:
+
+```
+$ drone secret add --repository ruanbekker/drone-ci-testing -name SSH_PASSWORD -value secret-password
+$ drone secret add --repository ruanbekker/drone-ci-testing -name SSH_KEY -value @/home/myuser/.ssh/id_rsa
+```
+
+Pipeline with Secrets:
+- [Ref](https://knowledge.rootknecht.net/drone)
+
+```
+pipeline:
+  deploy:
+    image:    appleboy/drone-scp
+    host:     HOST
+    port:     22
+    secrets: [ SSH_USERNAME, SSH_PASSWORD ]
+    rm: true
+    script:
+      - echo "Hello World" > /var/www/html/data.txt
+    source:
+      - src/
+    target:
+      - /var/www/html
+    strip_components: 1
 ```
 
 ## Usage
@@ -357,6 +390,22 @@ steps:
   photo:
     - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
   format: markdown
+```
+
+### Email Notifications
+
+```
+  notify:
+    image: drillster/drone-email
+    from: drone@example.com
+    host: smtp.example.com
+    skip_verify: true
+    secrets: [ email_username, email_password ]
+    subject: >
+      [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
+      ({{ commit.branch }} - {{ truncate commit.sha 8 }})
+    recipients:
+      - user@domain.com
 ```
 
 ### SSH Example
