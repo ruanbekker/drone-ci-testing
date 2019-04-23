@@ -499,6 +499,7 @@ Using docker-remote-tunnel to run docker commands remotely via docker socket
 
 - [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
 - [drone/docs pipeline](https://github.com/drone/docs/blob/master/.drone.yml)
+- [cncd/pipelines samples](https://github.com/cncd/pipeline/tree/master/samples)
 
 ### Docker Swarm Stacks
 
