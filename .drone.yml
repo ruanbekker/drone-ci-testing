@@ -65,6 +65,8 @@ steps:
     subject: >
       [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
       ({{ build.branch }} - {{ truncate build.commit 8 }})
+    when:
+      status: [ changed, failure ]
     
 #- name: telegram
 #  image: appleboy/drone-telegram
