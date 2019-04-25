@@ -640,6 +640,10 @@ depends_on:
 
 - https://github.com/codestation/drone-stack
 
+### Resources
+
+- https://www.slideshare.net/appleboy/drone-cicd-platform
+
 ```
 
 ```
