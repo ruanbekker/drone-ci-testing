@@ -57,7 +57,7 @@ steps:
     from: 
       from_secret: smtp_from
     skip_verify: false
-    secrets: [ email_host, email_port, email_recipients, email_username, email_password ]
+    secrets: [ EMAIL_HOST, EMAIL_PORT, email_recipients, email_username, email_password ]
     subject: >
       [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
       ({{ build.branch }} - {{ truncate build.commit 8 }})
