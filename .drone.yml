@@ -9,20 +9,6 @@ steps:
       from_secret: myusername
   commands:
     - echo "run env command"
-      
-#- name: publish
-#  image: plugins/docker
-#  settings:
-#    repo: ruanbekker/dronetest
-#    auto_tag: false
-#    auto_tag_suffix: alpine
-#    tags:
-#     - ${DRONE_COMMIT}
-#      - latest
-#    username: 
-#      from_secret: dockerhub_username
-#    password:
-#      from_secret: dockerhub_password
 
 - name: ssh
   image: appleboy/drone-ssh
@@ -65,16 +51,27 @@ steps:
         build {{build.number}} failed. Fix me please.
       {{/success}}
 
-- name: telegram
-  image: appleboy/drone-telegram
+- name: notify
+  image: drillster/drone-email
   settings:
-    token:
-      from_secret: telegram_token
-    to:
-      from_secret: telegram_to
-  when:
-    status: [ success, failure ]
-  photo:
-    - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
-  format: markdown
+    from: 
+      from_secret: smtp_from
+    skip_verify: false
+    secrets: [ email_host, email_port, email_recipients, email_username, email_password ]
+    subject: >
+      [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
+      ({{ build.branch }} - {{ truncate build.commit 8 }})
+    
+#- name: telegram
+#  image: appleboy/drone-telegram
+#  settings:
+#    token:
+#      from_secret: telegram_token
+#    to:
+#      from_secret: telegram_to
+#  when:
+#    status: [ success, failure ]
+#  photo:
+#    - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
+#  format: markdown
   
