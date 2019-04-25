@@ -56,8 +56,10 @@ steps:
   settings:
     from: 
       from_secret: smtp_from
-    skip_verify: false
-    secrets: [ email_host, email_port, email_recipients, email_username, email_password ]
+    host: smtp.sendgrid.net
+    port: 587
+    skip_verify: true
+    secrets: [ email_recipients, email_username, email_password ]
     subject: >
       [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
       ({{ build.branch }} - {{ truncate build.commit 8 }})
