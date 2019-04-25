@@ -639,6 +639,7 @@ depends_on:
 ### Docker Swarm Stacks
 
 - https://github.com/codestation/drone-stack
+- https://github.com/drone/drone/issues/2277
 
 ### Resources
 
