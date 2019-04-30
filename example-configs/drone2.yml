@@ -1,0 +1,82 @@
+kind: pipeline
+name: default
+
+steps:
+- name: test
+  image: alpine
+  environment:
+    MYUSERNAME:
+      from_secret: myusername
+  commands:
+    - echo "run env command"
+
+- name: ssh
+  image: appleboy/drone-ssh
+  pull: true
+  settings:
+    username: root
+    port: 22
+    host:
+      from_secret: ssh_host
+    key:
+        from_secret: ssh_key
+    volumes:
+      - /root:/tmp/ssh
+    script:
+      - pwd
+      - ls -lah
+      - ls /tmp/ssh/
+      - find / -name Dockerfile
+      - docker node ls
+
+#- name: slack
+#  image: plugins/slack
+#  settings:
+#    webhook:
+#      from_secret: slack_webhook
+#    channel: system_events
+#    username: drone
+#    icon_url: https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
+#    template: >
+#      {{#success build.status}}
+#         build {{build.number}} status: *{{build.status}}*
+#        build link: {{build.link}}
+#        build author: {{build.author}}
+#        build ref: {{build.ref}}
+#        build event: {{build.event}}
+#        build commit: {{build.commit}}
+#        build branch: {{build.branch}}
+#        build deploy: {{build.deployTo}}
+#      {{else}}
+#        build {{build.number}} failed. Fix me please.
+#      {{/success}}
+
+- name: notify-email
+  image: drillster/drone-email
+  settings:
+    from: 
+      from_secret: smtp_from
+    host: smtp.sendgrid.net
+    port: 587
+    skip_verify: true
+    secrets: [ email_recipients, email_username, email_password ]
+    subject: >
+      [DRONE CI]: {{ build.status }}: {{ repo.owner }}/{{ repo.name }}
+      ({{ build.branch }} - {{ truncate build.commit 8 }})
+    when:
+      status: [ changed, failure ]
+    
+#- name: telegram
+#  image: appleboy/drone-telegram
+#  settings:
+#    token:
+#      from_secret: telegram_token
+#    to:
+#      from_secret: telegram_to
+#  when:
+#    status: [ success, failure ]
+#  photo:
+#    - https://cdn.shopify.com/s/files/1/1061/1924/products/Virus_Emoji_large.png?v=1480481048
+#  format: markdown
+  
+ 
