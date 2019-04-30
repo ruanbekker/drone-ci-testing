@@ -635,6 +635,7 @@ depends_on:
 - [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
 - [drone/docs pipeline](https://github.com/drone/docs/blob/master/.drone.yml)
 - [cncd/pipelines samples](https://github.com/cncd/pipeline/tree/master/samples)
+- [xueshanf/docker-awscli example](https://github.com/xueshanf/docker-awscli/blob/master/.drone.yml)
 
 ### Docker Swarm Stacks
 
@@ -645,6 +646,3 @@ depends_on:
 
 - https://www.slideshare.net/appleboy/drone-cicd-platform
 
-```
-
-```
