@@ -21,13 +21,15 @@ pipeline:
     username: Builds
     template: >
       {{#success build.status}}
-        [DRONE CI]: *{{ uppercase build.status }}* : <https://github.com/{{ repo.owner }}/{{ repo.name }}|{{ repo.owner }}/{{ repo.name }}>
-        > link: {{build.link}}
+        [DRONE CI]: *{{ uppercase build.status }}* 
+        > github repo: <https://github.com/{{ repo.owner }}/{{ repo.name }}|{{ repo.owner }}/{{ repo.name }}>
+        > drone build: {{build.link}}
         > author: {{build.author}}
-        > commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{build.commit}}|{{truncate build.commit 8}}>
+        > github commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{build.commit}}|{{truncate build.commit 8}}>
       {{else}}
-        [DRONE CI]: *{{ uppercase build.status }}* : <https://github.com/{{ repo.owner }}/{{ repo.name }}|{{ repo.owner }}/{{ repo.name }}>
-        > link: {{build.link}}
+        [DRONE CI]: *{{ uppercase build.status }}*
+        > github repo: <https://github.com/{{ repo.owner }}/{{ repo.name }}|{{ repo.owner }}/{{ repo.name }}>
+        > drone build: {{build.link}}
         > author: {{build.author}}
-        > commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{build.commit}}|{{truncate build.commit 8}}>
+        > github commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{build.commit}}|{{truncate build.commit 8}}>
       {{/success}}
