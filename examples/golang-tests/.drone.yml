@@ -1,0 +1,55 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - go test -cover -v
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      - env
+
+  - name: build
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - go build -o app .
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      
+  - name: run
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - ./app
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      
+  - name: docker-build
+    image: docker:dind
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t ruanbekker/golang:$$DRONE_COMMIT_SHA .
+      
+  - name: docker-deploy
+    image: docker:dind
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+    commands:
+      - docker run ruanbekker/golang:$$DRONE_COMMIT_SHA
+      - docker ps
+      
+volumes:
+  - name: docker-socket
+    host:
+      path: /var/run/docker.sock
+  - name: cache
+    temp: {}
