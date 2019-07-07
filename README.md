@@ -1,4 +1,4 @@
-# drone-ci-testing [![Build Status](https://drone.rbkr.xyz/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://drone.rbkr.xyz/ruanbekker/drone-ci-testing)
+# drone-ci-testing [![Build Status](https://drone.rbkr.xyz/api/badges/ruanbekker/drone-ci-testing/status.svg)](https://cloud.drone.io/ruanbekker/drone-ci-testing)
 testing cloud.drone.io
 
 ## Contents
@@ -475,6 +475,68 @@ Note that this will run on the host where the drone agent is located.
     when:
       event: [push]
       branch: [master, develop, release/*]
+```
+
+### Volumes: Temporary and Bind Mounts
+
+- https://docs.drone.io/user-guide/pipeline/volumes/
+
+```
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - go test -cover -v
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      - env
+
+  - name: build
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - go build -o app .
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      
+  - name: run
+    image: golang:alpine
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    commands:
+      - ./app
+      - echo $$HOSTNAME >> /tmp/cache/hostname.txt
+      
+  - name: docker-build
+    image: docker:dind
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t ruanbekker/golang:$$DRONE_COMMIT_SHA .
+      
+  - name: docker-deploy
+    image: docker:dind
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+    commands:
+      - docker run ruanbekker/golang:$$DRONE_COMMIT_SHA
+      - docker ps
+      
+volumes:
+  - name: docker-socket
+    host:
+      path: /var/run/docker.sock
+  - name: cache
+    temp: {}
 ```
 
 ### Rsync Example
