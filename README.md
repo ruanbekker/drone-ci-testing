@@ -693,6 +693,93 @@ depends_on:
 - backend
 ```
 
+### 3 Times Multiple Pipeline Dependencies with Volumes
+
+```
+kind: pipeline
+type: docker
+name: one
+
+steps:
+- name: one-a
+  image: busybox
+  commands:
+  - touch /data/$$RANDOM.txt
+  - ls
+  volumes:
+  - name: artifacts
+    path: /data
+
+volumes:
+- name: artifacts
+  host:
+    path: /tmp/artifacts
+---
+kind: pipeline
+type: docker
+name: two
+
+steps:
+- name: two-a
+  image: busybox
+  commands:
+  - touch /data/$$RANDOM.txt
+  - ls
+  volumes:
+  - name: artifacts
+    path: /data
+
+volumes:
+- name: artifacts
+  host:
+    path: /tmp/artifacts
+---
+kind: pipeline
+type: docker
+name: after
+
+steps:
+- name: after-a
+  image: busybox
+  commands:
+  - touch /data/after.txt
+  - ls
+  volumes:
+  - name: artifacts
+    path: /data
+
+depends_on:
+- one
+- two
+
+volumes:
+- name: artifacts
+  host:
+    path: /tmp/artifacts
+---
+kind: pipeline
+type: docker
+name: after-after
+
+steps:
+- name: after-a
+  image: busybox
+  commands:
+  - find /data
+  volumes:
+  - name: artifacts
+    path: /data
+
+depends_on:
+- after
+
+volumes:
+- name: artifacts
+  host:
+    path: /tmp/artifacts
+
+```
+
 ### Example Pipelines
 
 - [myth/overflow drone pipeline](https://github.com/myth/overflow/blob/master/.drone.yml)
