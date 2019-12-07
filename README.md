@@ -567,21 +567,17 @@ volumes:
 Running steps in parallel:
 
 ```
-- name: parallel-one
+- name: step-one
   image: alpine
   commands:
   - date +%s
 
-- name: parallel-two
+- name: step-two
   image: alpine
   commands:
   - date +%s
   
-- name: step2a
-  image: alpine
-  depends_on: [ parallel-one, parallel-two ]
-  
-- name: step2b
+- name: parallel-step
   image: alpine
   depends_on: [ parallel-one, parallel-two ]  
 
