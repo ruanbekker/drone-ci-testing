@@ -567,25 +567,24 @@ volumes:
 Running steps in parallel:
 
 ```
- p1-a:
-    image: alpine
-    group: test
-    environment:
-      TAGS: foobar
-    commands:
-      - sleep 20
-      - date
-      - echo done
-      
-  p1-b:
-    image: alpine
-    group: test
-    environment:
-      TAGS: foobar
-    commands:
-      - sleep 20
-      - date
-      - echo done
+- name: parallel-one
+  image: alpine
+  commands:
+  - date +%s
+
+- name: parallel-two
+  image: alpine
+  commands:
+  - date +%s
+  
+- name: step2a
+  image: alpine
+  depends_on: [ parallel-one, parallel-two ]
+  
+- name: step2b
+  image: alpine
+  depends_on: [ parallel-one, parallel-two ]  
+
 ```
 
 ### Docker Remote Tunnel Example
