@@ -626,6 +626,15 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=test
+
+services:
+- name: mysql
+  image: mysql:5.7
+  environment:
+    MYSQL_DATABASE: rest_api_example
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_USER: demo
+    MYSQL_PASSWORD: demo
 ```
 
 ### Multipipeline Depends on Steps
