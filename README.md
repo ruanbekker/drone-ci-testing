@@ -792,6 +792,7 @@ volumes:
 - [cncd/pipelines samples](https://github.com/cncd/pipeline/tree/master/samples)
 - [xueshanf/docker-awscli example](https://github.com/xueshanf/docker-awscli/blob/master/.drone.yml)
 - [owncloud-docker/server pipeline](https://github.com/owncloud-docker/server/blob/master/.drone.yml)
+- [justinbarrick pipeline](https://github.com/justinbarrick/fluxcloud/blob/master/.drone.yml)
 
 ### Docker Swarm Stacks
 
