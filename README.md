@@ -20,6 +20,7 @@ Contents of this page
   * [SSH Example](#ssh-example)
   * [SCP Example](#scp-example)
   * [Rsync Example](#rsync-example)
+  * [Volumes: Persistence]()
   * [Volumes: Temporary and Bind Mounts](#volumes-temporary-and-bind-mounts)
   * [Parallel Builds](#parallel-builds)
   * [Docker Remote Tunnel Example](#docker-remote-tunnel-example)
@@ -477,6 +478,42 @@ Note that this will run on the host where the drone agent is located.
     when:
       event: [push]
       branch: [master, develop, release/*]
+```
+
+### Volumes: Persistence
+
+- https://docs.drone.io/user-guide/pipeline/volumes/
+
+```
+kind: pipeline
+name: default
+
+steps:
+- name: host-persistence
+  image: busybox
+  commands:
+  - find /data
+  volumes:
+  - name: hostvol
+    path: /data1
+
+- name: build-persistence
+  image: busybox
+  commands:
+  - touch /data2/file.txt
+  volumes:
+  - name: buildvol
+    path: /data2/file.txt
+
+depends_on:
+- after
+
+volumes:
+- name: hostvol
+  host:
+    path: /tmp/artifacts
+- name: buildvol
+  temp: {}
 ```
 
 ### Volumes: Temporary and Bind Mounts
