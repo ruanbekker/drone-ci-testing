@@ -17,6 +17,7 @@ Contents of this page
   * [Slack Notifications](#slack-notifications)
   * [Telegram Notifications](#telegram-notifications)
   * [Email Notifications](#email-notifications)
+  * [Matrix Notifications](#matrix-notifications)
   * [SSH Example](#ssh-example)
   * [SCP Example](#scp-example)
   * [Rsync Example](#rsync-example)
@@ -409,6 +410,32 @@ steps:
       ({{ commit.branch }} - {{ truncate commit.sha 8 }})
     recipients:
       - user@domain.com
+```
+
+### Matrix Notifications
+
+Note: the `roomid` is the internal Room-ID which can found via Element-IM (`Room Propertys -> Advanced -> internal Room-Id`)
+
+
+```
+- name: notify
+  image: plugins/matrix
+  settings:
+    homeserver: "https://matrix.myhost.io"
+    roomid: "!cagOuBPJLTrTipJpvf:matrix.myhost.io"
+    username:
+      from_secret: matrix_username
+    password:
+      from_secret: matrix_password
+    template: |
+      `${DRONE_REPO}` build #${DRONE_BUILD_NUMBER} (${DRONE_COMMIT_MESSAGE}) status: **${DRONE_BUILD_STATUS}**
+
+      [show commit](${DRONE_COMMIT_LINK})
+
+  when:
+    status:
+      - failure
+      - success   
 ```
 
 ### SSH Example
